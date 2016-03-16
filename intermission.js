@@ -10,7 +10,7 @@ var time, start_time, pause_time, interval, paused, button, div;
 time = new Date().getTime();
 start_time = time;
 pause_time = time;
-interval = setInterval(writeTime, 200);
+interval = setInterval(resume, 200);
 paused = false;
 button = document.getElementsByTagName("button")[0];
 div = document.getElementsByClassName("main")[0];
@@ -23,25 +23,32 @@ function pauseHandler()
 	time = new Date().getTime()
 	if (paused) {
 		start_time = start_time + pause_time;
-		console.log(start_time);
-		interval = setInterval(writeTime, 200)
+		console.log("new start time is " + start_time.toString());
+		interval = setInterval(resume, 200);
+		button.innerHTML = "Pause";
 	} else {
 		pause_time = time - start_time;
-		console.log(pause_time);
-		interval = setInterval(pauseTime, 200)
+		interval = setInterval(pause, 200);
+		button.innerHTML = "Resume"
 	}
 	paused = !paused;		
 }
 
-function writeTime() 
+function resume() 
 {
 	time = new Date().getTime();
-	div.innerHTML = time - start_time
+	writeTimeToHTML(time - start_time)
 }
 
-function pauseTime() 
+
+function pause() 
 {
-	div.innerHTML = pause_time;			
+	writeTimeToHTML(pause_time)
 }
 
+function writeTimeToHTML(t) {
+        output = (t/1000).toString().split(".");
+        output[1] = output[1] == null ? 0 : output[1];
+        div.innerHTML = output[0] + ":" + output[1]
+}
 
