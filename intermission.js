@@ -1,31 +1,47 @@
-console.log("Hello world");
+//intermission.js
+//stops and starts a stopwatch on a button click
+//maintains the time of start and stop at the millisecond level.
+// author: Louis Ritchie 
+// LouisRitchie@github.com
+// March 16th
 
-var start_time = new Date().getTime();
-var paused = true;
-var time;
+var time, start_time, pause_time, interval, paused, button, div;
 
-console.log(document.getElementsByClassName("main")[0]);
+time = new Date().getTime();
+start_time = time;
+pause_time = time;
+interval = setInterval(writeTime, 200);
+paused = false;
+button = document.getElementsByTagName("button")[0];
+div = document.getElementsByClassName("main")[0];
 
-var div = document.getElementsByClassName("main")[0];
-var button = document.getElementsByClassName("button")[0];
 button.addEventListener("click", pauseHandler);
 
-setInterval(writeTime, 10);
-
-function pauseHandler() {
-	paused = !paused;
-	time = new Date().getTime();
+function pauseHandler() 
+{
+	clearInterval(interval);
+	time = new Date().getTime()
 	if (paused) {
-		var interval = setInterval(writeTime(), 10);
-	}		
-	else {
-		var pauseTime = time - start_time;
-		div.innerHTML = pauseTime.toString() + " - Paused"; 
+		start_time = start_time + pause_time;
+		console.log(start_time);
+		interval = setInterval(writeTime, 200)
+	} else {
+		pause_time = time - start_time;
+		console.log(pause_time);
+		interval = setInterval(pauseTime, 200)
 	}
+	paused = !paused;		
 }
 
-function writeTime() {
+function writeTime() 
+{
 	time = new Date().getTime();
-	div.innerHTML = time - start_time;
+	div.innerHTML = time - start_time
 }
+
+function pauseTime() 
+{
+	div.innerHTML = pause_time;			
+}
+
 
