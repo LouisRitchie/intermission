@@ -1,34 +1,40 @@
-//intermission.js
-//stops and starts a stopwatch on a button click
-//maintains the time of start and stop at the millisecond level.
+// intermission.js
+// stops and starts a stopwatch on a button click
+// maintains the time of start and stop at the millisecond level.
 // author: Louis Ritchie 
 // LouisRitchie@github.com
 // March 16th
 
 var time, start_time, pause_time, interval, paused, button, div;
 
-time = new Date().getTime();
-start_time = time;
-pause_time = time;
-interval = setInterval(resume, 200);
 paused = false;
 button = document.getElementsByTagName("button")[0];
 div = document.getElementsByClassName("main")[0];
 
-button.addEventListener("click", pauseHandler);
+button.addEventListener("click", init);
+
+function init() {
+	time = new Date().getTime();
+	start_time = time;
+	pause_time = time - start_time;
+	button.removeEventListener("click", init);
+	button.addEventListener("click", pauseHandler);
+	button.innerHTML = "Pause";
+	interval = setInterval(resume, 67)	
+}
 
 function pauseHandler() 
 {
 	clearInterval(interval);
-	time = new Date().getTime()
+	time = new Date().getTime();
 	if (paused) {
 		start_time = start_time + pause_time;
 		console.log("new start time is " + start_time.toString());
-		interval = setInterval(resume, 200);
+		interval = setInterval(resume, 67);
 		button.innerHTML = "Pause";
 	} else {
 		pause_time = time - start_time;
-		interval = setInterval(pause, 200);
+		interval = setInterval(pause, 67);
 		button.innerHTML = "Resume"
 	}
 	paused = !paused;		
