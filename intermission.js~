@@ -66,8 +66,5 @@ formats the time into seconds:ms.
 function writeTimeToHTML(t) {
         output = (t/1000).toString().split(".");
         output[1] = output[1] == null ? 0 : output[1];
-        while (output[1].length < 3) {
-        	output[1] += "0"
-        }
         div.innerHTML = output[0] + ":" + output[1]
 }
