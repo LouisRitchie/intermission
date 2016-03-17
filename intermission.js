@@ -34,7 +34,7 @@ function init()
 	button.addEventListener("click", pauseHandler);
 	button.innerHTML = "Pause";
 	reset.addEventListener("click", resetHandler);
-	interval = setInterval(resume, 37)	
+	interval = setInterval(resume, 37)
 }
 
 /* pauseHandler()
@@ -62,6 +62,7 @@ function resetHandler()
 	clearInterval(interval);
 	paused = false;
 	div.innerHTML = "0:000";
+	markZone.innerHTML = "";
 	button.innerHTML = "Start";
 	button.removeEventListener("click", pauseHandler);
 	button.addEventListener("click", init);
@@ -73,8 +74,9 @@ function resume()
 {
 	times[1] = new Date().getTime();
 	writeTimeToHTML(times[1] - times[0])
-	if ((times[1] - times[0]) % 5000 >= 0 && (times[1] - times[0]) % 5000 <= 37 )
+	if (((times[1] - times[0]) % 5000 > 0 && (times[1] - times[0]) % 5000 <= 37) || (markZone.innerHTML == "")) {
 		markZone.innerHTML += "mark!\n"
+	}
 }
 
 /* writeTimeToHTML
