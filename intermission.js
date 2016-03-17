@@ -17,7 +17,9 @@ var interval, paused, button, div;
 
 paused = false;
 button = document.getElementsByTagName("button")[0];
+reset = document.getElementsByTagName("button")[1];
 div = document.getElementById("timer");
+markZone = document.getElementsByTagName("h6")[0];
 
 button.addEventListener("click", init);
 
@@ -31,6 +33,7 @@ function init()
 	button.removeEventListener("click", init);
 	button.addEventListener("click", pauseHandler);
 	button.innerHTML = "Pause";
+	reset.addEventListener("click", resetHandler);
 	interval = setInterval(resume, 37)	
 }
 
@@ -44,13 +47,25 @@ function pauseHandler()
 	if (paused) {
 		times[0] += times[1] - times[2];
 		interval = setInterval(resume, 37);
-	} else {
+	} else {	
 		times[2] = times[1];
 	}
 	paused = !paused;		
 	button.innerHTML = paused ? "Resume" : "Pause"
 }
 
+/* resetHandler()
+Return everything to the starting state
+*/
+function resetHandler() 
+{
+	clearInterval(interval);
+	paused = false;
+	div.innerHTML = "0:000";
+	button.innerHTML = "Start";
+	button.removeEventListener("click", pauseHandler);
+	button.addEventListener("click", init);
+}
 /* resume()
 call by setInterval() in pauseHandler(), writes the time to HTML.
 */
@@ -58,6 +73,8 @@ function resume()
 {
 	times[1] = new Date().getTime();
 	writeTimeToHTML(times[1] - times[0])
+	if ((times[1] - times[0]) % 5000 >= 0 && (times[1] - times[0]) % 5000 <= 37 )
+		markZone.innerHTML += "mark!\n"
 }
 
 /* writeTimeToHTML
