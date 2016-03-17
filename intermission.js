@@ -5,7 +5,16 @@
 // LouisRitchie@github.com
 // March 16th
 
-var time, start_time, pause_time, interval, paused, button, div;
+var times = [];
+/* times array. All times in ms since epoch.
+	element:	represents:
+	0		time at initialization, never updated
+	1		current time
+	2		time of last pause	
+	3		time of last resume
+	4		sum of all time spent paused, to subtract from times[1]
+*/
+var interval, paused, button, div;
 
 paused = false;
 button = document.getElementsByTagName("button")[0];
@@ -13,10 +22,10 @@ div = document.getElementsByClassName("main")[0];
 
 button.addEventListener("click", init);
 
-function init() {
-	time = new Date().getTime();
-	start_time = time;
-	pause_time = time - start_time;
+function init() 
+{
+	times[0] = times[1] = new Date().getTime();
+	times[2] = times[3] = times[4] = 0;
 	button.removeEventListener("click", init);
 	button.addEventListener("click", pauseHandler);
 	button.innerHTML = "Pause";
@@ -26,14 +35,14 @@ function init() {
 function pauseHandler() 
 {
 	clearInterval(interval);
-	time = new Date().getTime();
+	times[1] = new Date().getTime();
 	if (paused) {
-		start_time = start_time + pause_time;
-		console.log("new start time is " + start_time.toString());
+		times[3] = times[1];
+		times[4] += times[3] - times[2];
 		interval = setInterval(resume, 67);
 		button.innerHTML = "Pause";
 	} else {
-		pause_time = time - start_time;
+		times[2] = times[1];
 		interval = setInterval(pause, 67);
 		button.innerHTML = "Resume"
 	}
@@ -42,14 +51,13 @@ function pauseHandler()
 
 function resume() 
 {
-	time = new Date().getTime();
-	writeTimeToHTML(time - start_time)
+	times[1] = new Date().getTime();
+	writeTimeToHTML(times[1] - times[4] - times[0])
 }
-
 
 function pause() 
 {
-	writeTimeToHTML(pause_time)
+	writeTimeToHTML(times[2] - times[4] - times[0])
 }
 
 function writeTimeToHTML(t) {
